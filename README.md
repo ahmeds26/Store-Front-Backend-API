@@ -59,9 +59,9 @@ Usage:
 
         Orders Endpoints:
 
-            create: http://localhost:3000/orders'
-            index: http://localhost:3000/orders'
-            show: http://localhost:3000/orders/:userid'
+			create: http://localhost:3000/orders'
+			index: http://localhost:3000/orders'
+			show: http://localhost:3000/orders/:userid'
 			addProduct: http://localhost:3000/orders/:id/products'
 
     Testing Using Jasmine:
