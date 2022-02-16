@@ -1,6 +1,6 @@
 import { Product, ProductStore } from '../product';
 import { User, UserStore } from '../user';
-import { OrderProduct, OrderProductStore } from '../order';
+import { Order, OrderProduct, OrderProductStore } from '../order';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 
@@ -26,11 +26,17 @@ describe('store front suite', () => {
     category: 'category',
   };
 
-  const orderproduct: OrderProduct = {
+  const order: Order = {
     productid: 1,
     userid: 1,
     quantity: 10,
     orderstatus: 'completed',
+  };
+
+  const orderproduct: OrderProduct = {
+    orderid: 1,
+    productid: 1,
+    quantity: 10,
   };
 
   describe('User Model', () => {
@@ -128,7 +134,7 @@ describe('store front suite', () => {
     });
 
     it('create method should add an order', async () => {
-      const result = await opstore.create(orderproduct);
+      const result = await opstore.create(order);
       expect(result.userid).toEqual(1);
     });
 

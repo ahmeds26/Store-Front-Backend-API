@@ -5,20 +5,26 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ## API Endpoints
 #### Products
-- Index                   => '/products'
-- Show                    => '/products/:id'
-- Create [token required] => '/products'
+- Index                   => '/products'     => GET method
+- Show                    => '/products/:id' => GET method
+- Create [token required] => '/products'     => POST method 
 - [OPTIONAL] Top 5 most popular products 
 - [OPTIONAL] Products by category (args: product category)
+- Update                  => '/products/:id' => PUT method
+- Delete                  => '/products/:id' => DELETE method
 
 #### Users
-- Index [token required]   => '/users'
-- Show [token required]    => '/users/:id'
-- Create N[token required] => '/users'
+- Index [token required]   => '/users'                => GET method
+- Show [token required]    => '/users/:id'            => GET method
+- Create N[token required] => '/users'                => POST method
+- Authenticate             => '/users/authenticate'   => POST method
 
 #### Orders
-- Current Order by user (args: user id)[token required] => '/orders/:userId'
+- Current Order by user (args: user id)[token required] => '/orders/:userId'         => GET method
 - [OPTIONAL] Completed Orders by user (args: user id)[token required]
+- Index                                                    '/orders'                 => GET method
+- Create                                                   '/orders'                 => POST method
+- AddProduct                                               '/orders/:id/products'    => POST method
 
 ## Data Shapes
 #### Product
@@ -37,7 +43,8 @@ These are the notes from a meeting with the frontend developer that describe wha
 Indexes:
     "products_pkey" PRIMARY KEY, btree (id)
 Referenced by:
-    TABLE "orders_products" CONSTRAINT "orders_products_productid_fkey" FOREIGN KEY (productid) REFERENCES products(id)
+    TABLE "order_products" CONSTRAINT "order_products_productid_fkey" FOREIGN KEY (productid) REFERENCES products(id)
+    TABLE "orders" CONSTRAINT "orders_productid_fkey" FOREIGN KEY (productid) REFERENCES products(id)
 
 
 #### User
@@ -57,7 +64,6 @@ Referenced by:
 Indexes:
     "users_pkey" PRIMARY KEY, btree (id)
 Referenced by:
-    TABLE "orders_products" CONSTRAINT "orders_products_userid_fkey" FOREIGN KEY (userid) REFERENCES users(id)
     TABLE "orders" CONSTRAINT "orders_userid_fkey" FOREIGN KEY (userid) REFERENCES users(id)
 
 #### Orders
@@ -68,17 +74,33 @@ Referenced by:
 - status of order (active or complete)
 
 	
-                                      Table "public.orders_products"
-   Column    |         Type          | Collation | Nullable |                   Default
--------------+-----------------------+-----------+----------+---------------------------------------------
- id          | integer               |           | not null | nextval('orders_products_id_seq'::regclass)
+                                      Table "public.orders"
+   Column    |         Type          | Collation | Nullable |              Default
+-------------+-----------------------+-----------+----------+------------------------------------
+ id          | integer               |           | not null | nextval('orders_id_seq'::regclass)
  productid   | integer               |           | not null |
  userid      | integer               |           | not null |
  quantity    | integer               |           | not null |
  orderstatus | character varying(50) |           | not null |
 Indexes:
-    "orders_products_pkey" PRIMARY KEY, btree (id)
+    "orders_pkey" PRIMARY KEY, btree (id)
 Foreign-key constraints:
-    "orders_products_productid_fkey" FOREIGN KEY (productid) REFERENCES products(id)
-    "orders_products_userid_fkey" FOREIGN KEY (userid) REFERENCES users(id)
+    "orders_productid_fkey" FOREIGN KEY (productid) REFERENCES products(id)
+    "orders_userid_fkey" FOREIGN KEY (userid) REFERENCES users(id)
+Referenced by:
+    TABLE "order_products" CONSTRAINT "order_products_orderid_fkey" FOREIGN KEY (orderid) REFERENCES orders(id)
+	
+	
+                              Table "public.order_products"
+  Column   |  Type   | Collation | Nullable |                  Default
+-----------+---------+-----------+----------+--------------------------------------------
+ id        | integer |           | not null | nextval('order_products_id_seq'::regclass)
+ orderid   | integer |           | not null |
+ productid | integer |           | not null |
+ quantity  | integer |           | not null |
+Indexes:
+    "order_products_pkey" PRIMARY KEY, btree (id)
+Foreign-key constraints:
+    "order_products_orderid_fkey" FOREIGN KEY (orderid) REFERENCES orders(id)
+    "order_products_productid_fkey" FOREIGN KEY (productid) REFERENCES products(id)
 

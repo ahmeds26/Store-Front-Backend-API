@@ -33,25 +33,12 @@ export class ProductStore {
       );
     }
   }
-  /*
-    async create(p: Product): Promise<Product>{
-        try {
-            const conn = await client.connect()
-            const sql = 'INSERT INTO products (name, price, category) VALUES($1, $2, $3) RETURNING *'
-            const result = await conn.query(sql, [p.name, p.price, p.category]);
-            const resultedProduct = result.rows[0];
-            conn.release()
-            return resultedProduct;
-        } catch (err) {
-            throw new Error(`Couldn't create new product with name : ${name}.Error: ${(err as Error).message}`);
-        }
-    };
-    */
+  
   async create(product: Product): Promise<Product> {
     try {
       const conn = await client.connect();
       const sql =
-        'INSERT INTO products (productName, price, category) VALUES($1, $2, $3) RETURNING *';
+        'INSERT INTO products (productname, price, category) VALUES($1, $2, $3) RETURNING *';
       const result = await conn.query(sql, [
         product.productname,
         product.price,
@@ -89,7 +76,7 @@ export class ProductStore {
       const conn = await client.connect();
       if (product.productname && product.price) {
         sql =
-          'Update products SET productName=($2),price=($3) WHERE id=($1) RETURNING *';
+          'Update products SET productname=($2),price=($3) WHERE id=($1) RETURNING *';
         result = await conn.query(sql, [
           product.id,
           product.productname,
@@ -98,7 +85,7 @@ export class ProductStore {
         updatedProduct = result.rows[0];
       } else if (product.productname && product.category) {
         sql =
-          'Update products SET productName=($2),category=($3) WHERE id=($1) RETURNING *';
+          'Update products SET productname=($2),category=($3) WHERE id=($1) RETURNING *';
         result = await conn.query(sql, [
           product.id,
           product.productname,
@@ -115,7 +102,7 @@ export class ProductStore {
         ]);
         updatedProduct = result.rows[0];
       } else if (product.productname) {
-        sql = 'Update products SET productName=($2) WHERE id=($1) RETURNING *';
+        sql = 'Update products SET productname=($2) WHERE id=($1) RETURNING *';
         result = await conn.query(sql, [product.id, product.productname]);
         updatedProduct = result.rows[0];
       } else if (product.price) {

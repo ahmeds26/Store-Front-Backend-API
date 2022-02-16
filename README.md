@@ -28,6 +28,8 @@ Usage:
 
     Preparing Data:
         You should create two databases on Postgres:
+			database-host: for example "127.0.0.1"
+			database-port: for example "5432" 
             dev-database: for example "store_database"
             test-database: for example "store_database_test"
         
@@ -60,6 +62,7 @@ Usage:
             create: http://localhost:3000/orders'
             index: http://localhost:3000/orders'
             show: http://localhost:3000/orders/:userid'
+			addProduct: http://localhost:3000/orders/:id/products'
 
     Testing Using Jasmine:
 
